@@ -4,6 +4,7 @@ import socket
 import jinja2
 import random
 import argparse
+import os
 
 class RandHandler(http.server.SimpleHTTPRequestHandler):
 
@@ -52,7 +53,15 @@ def main():
 	with server as httpd:
 		# httpd.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		print("serving at port", PORT)
-		httpd.serve_forever()
+		pid = os.fork()
+		if pid == 0:
+			# Child
+			httpd.serve_forever()
+		elif pid > 0:
+			# Parent
+			print(f"Running server in process {pid}")
+		else:
+			print("Child process creating failed")
 
 if __name__ == "__main__":
 	main()
