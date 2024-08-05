@@ -53,15 +53,7 @@ def main():
 	with server as httpd:
 		# httpd.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		print("serving at port", PORT)
-		pid = os.fork()
-		if pid == 0:
-			# Child
-			httpd.serve_forever()
-		elif pid > 0:
-			# Parent
-			print(f"Running server in process {pid}")
-		else:
-			print("Child process creating failed")
+		httpd.serve_forever()
 
 if __name__ == "__main__":
 	main()
